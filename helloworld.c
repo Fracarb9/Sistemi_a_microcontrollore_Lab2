@@ -32,30 +32,20 @@
 *</pre>
 ******************************************************************************/
 
-/***************************** Include Files *********************************/
-
 #include "xstatus.h"
 #include "xtmrctr_l.h"
 #include "xil_printf.h"
 #include "xparameters.h"
 
-/************************** Constant Definitions *****************************/
 
-/*
- * The following constants map to the XPAR parameters created in the
- * xparameters.h file. They are only defined here such that a user can easily
- * change all the needed parameters in one place.
- */
+
 #ifndef SDT
 #define TMRCTR_BASEADDR		XPAR_TMRCTR_0_BASEADDR
 #else
 #define TMRCTR_BASEADDR		XPAR_XTMRCTR_0_BASEADDR
 #endif
 
-/*
- * This example only uses the 1st of the 2 timer counters contained in a
- * single timer counter hardware device
- */
+
 #define TIMER_COUNTER_0	 0
 
 //Indirizzi GPIO
@@ -68,26 +58,12 @@ volatile int * MER = (volatile int*)	0x4120001C;
 volatile int * IISR = (volatile int*)	0x41200000;
 volatile int * IIAR = (volatile int*)	0x4120000C;
 
-/************************** Function Prototypes ******************************/
+
 void myISR(void) __attribute__((interrupt_handler));
 int TmrCtrLowLevelExample(UINTPTR TmrCtrBaseAddress, u8 TimerCounter);
 
-/************************** Variable Definitions *****************************/
 volatile int led_state = 0; //Variabile per il controllo dei led
 
-/*****************************************************************************/
-/**
-* This function is the main function of the Tmrctr low level example.
-*
-* @param	None.
-*
-* @return	XST_SUCCESS to indicate success, else XST_FAILURE to indicate
-*		a Failure.
-*
-* @note		None.
-*
-*
-*****************************************************************************/
 int main(void)
 {
 	int Status;
@@ -111,29 +87,6 @@ int main(void)
 
 }
 
-/*****************************************************************************/
-/**
-* This function does a minimal test on the timer counter device and
-* the low level driver as a design example.  The purpose of this function is
-* to illustrate how to use the XTmrCtr low level driver.
-*
-*
-* @param	TmrCtrBaseAddress is the base address of the device.
-* @param	TmrCtrNumber is the timer counter of the device to operate on.
-*		Each device may contain multiple timer counters.
-*		The timer number is a zero based number with a range of
-*		0 - (XTC_DEVICE_TIMER_COUNT - 1).
-*
-* @return	XST_SUCCESS to indicate success, else XST_FAILURE to indicate
-*		a Failure.
-*
-* @note
-*
-* This function contains a loop which waits for the value of a timer counter
-* to change.  If the hardware is not working correctly, this function may not
-* return.
-*
-****************************************************************************/
 int TmrCtrLowLevelExample(UINTPTR TmrCtrBaseAddress, u8 TmrCtrNumber)
 {
 	u32 ControlStatus;
@@ -171,7 +124,7 @@ int TmrCtrLowLevelExample(UINTPTR TmrCtrBaseAddress, u8 TmrCtrNumber)
 void myISR(void)
 {
     unsigned p = *IISR;  // snapshot
-    // Controlla se è il timer 0
+    // Controlla se Ã¨ il timer 0
     if (p & XPAR_AXI_TIMER_0_INTERRUPT_MASK) {               // BTN
     	int ControlStatus = XTmrCtr_GetControlStatusReg(TMRCTR_BASEADDR,0);
     	XTmrCtr_SetControlStatusReg(TMRCTR_BASEADDR, 0,
